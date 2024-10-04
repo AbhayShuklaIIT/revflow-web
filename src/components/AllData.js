@@ -1,51 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as XLSX from 'xlsx';
 
-const QueryScreen = () => {
-  const [query, setQuery] = useState('');
+const AllData = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSearch = async () => {
-    setLoading(true);
-    setError('');
-    setResults([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError('');
+      setResults([]);
 
-    try {
-      const response = await fetch('http://127.0.0.1:5001/api/get-similar-item-v2', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-      });
+      try {
+        const response = await fetch('http://localhost:5001/api/get-all-items', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        });
 
-      if (response.status === 404) {
-        setError('No item found with this description.');
-        return;
+        if (response.status === 404) {
+          setError('No items found.');
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch results');
+        }
+
+        const data = await response.json();
+        if (data.status === 'success') {
+          setResults(data.items.map((item, index) => ({
+            image: item.image,
+            result: item.result,
+            id: index
+          })));
+        } else {
+          throw new Error('API returned unsuccessful status');
+        }
+      } catch (err) {
+        setError('Error fetching results. Please try again.');
+      } finally {
+        setLoading(false);
       }
+    };
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch results');
-      }
-
-      const data = await response.json();
-      if (data.status === 'success') {
-        setResults(data.similar_items.map((item, index) => ({
-          image: item.image,
-          result: item.result,
-          id: index
-        })));
-      } else {
-        throw new Error('API returned unsuccessful status');
-      }
-    } catch (err) {
-      setError('Error fetching results. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchData();
+  }, []);
 
   const exportToXLSX = () => {
     const workbook = XLSX.utils.book_new();
@@ -80,22 +83,6 @@ const QueryScreen = () => {
   return (
     <div className="min-h-screen bg-[#f2f3ff] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* <h1 className="text-5xl font-extrabold text-black mb-8 text-center">Query Screen</h1> */}
-        <div className="flex justify-center mb-8">
-          <input 
-            type="text" 
-            placeholder="Enter your query" 
-            value={query} 
-            onChange={(e) => setQuery(e.target.value)} 
-            className="p-4 border-2 border-[#434de7] rounded-l-lg w-96 focus:outline-none focus:ring-2 focus:ring-[#434de7] focus:border-transparent"
-          />
-          <button 
-            onClick={handleSearch} 
-            className="px-6 py-4 bg-[#434de7] text-white rounded-r-lg hover:bg-[#3038a0] transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#434de7] focus:ring-offset-2"
-          >
-            Search
-          </button>
-        </div>
         {loading && <div className="text-black text-center text-lg">Loading...</div>}
         {error && <div className="text-red-600 mb-6 text-center text-lg">{error}</div>}
         {results.length > 0 && (
@@ -126,4 +113,4 @@ const QueryScreen = () => {
   );
 };
 
-export default QueryScreen;
+export default AllData;

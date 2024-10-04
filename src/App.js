@@ -7,6 +7,8 @@ import OnboardNewItem from './components/OnboardNewItem';
 import UpdateItem from './components/UpdateItem';
 import QualityCheckOldItem from './components/QualityCheckOldItem';
 import Claims from './components/Claims';
+import AllData from './components/AllData';
+
 function App() {
   return (
     <Router>
@@ -23,6 +25,7 @@ function App() {
             <Route path="/update" element={<UpdateItem />} />
             <Route path="/quality-check" element={<QualityCheckOldItem />} />
             <Route path="/claims" element={<Claims />} />
+            <Route path="/all-data" element={<AllData />} />
           </Routes>
         </div>
       </div>
