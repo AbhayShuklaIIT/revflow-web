@@ -117,6 +117,10 @@ const Dashboard = () => {
     }
   };
 
+  const handleDeleteImages = () => {
+    setImages([]);
+  };
+
   return (
     <div className="flex flex-col items-center mt-10 p-8 bg-gradient-to-r from-gray-50 to-white shadow-lg rounded-lg">
       <h1 className="text-5xl font-bold text-gray-800 mb-4">Quality Check Dashboard</h1>
@@ -166,9 +170,15 @@ const Dashboard = () => {
         <h2 className="text-xl font-semibold">Uploaded Images:</h2>
         <div className="flex flex-wrap justify-center">
           {images.map((image, index) => (
-            <img key={index} src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} className="w-28 h-28 object-cover m-2 border rounded-lg shadow transition-transform transform hover:scale-105" />
+            <img key={index} src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} className="w-48 h-48 object-cover m-2 border rounded-lg shadow transition-transform transform hover:scale-105" />
           ))}
         </div>
+        <button 
+          onClick={handleDeleteImages} 
+          className="mt-2 p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 shadow-md"
+        >
+          Delete All Images
+        </button>
       </div>
       <div className="mt-2">
         <button 
