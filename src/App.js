@@ -8,7 +8,7 @@ import UpdateItem from './components/UpdateItem';
 import QualityCheckOldItem from './components/QualityCheckOldItem';
 import Claims from './components/Claims';
 import AllData from './components/AllData';
-
+import QueryScreenTags from './components/QueryScreenTags';
 function App() {
   return (
     <Router>
@@ -26,6 +26,7 @@ function App() {
             <Route path="/quality-check" element={<QualityCheckOldItem />} />
             <Route path="/claims" element={<Claims />} />
             <Route path="/all-data" element={<AllData />} />
+            <Route path="/query-tags" element={<QueryScreenTags />} />
           </Routes>
         </div>
       </div>

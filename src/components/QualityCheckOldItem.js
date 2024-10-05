@@ -7,7 +7,6 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [images, setImages] = useState([]);
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [responseData, setResponseData] = useState(null);
 
   const handleSearch = async () => {
@@ -16,7 +15,7 @@ const Dashboard = () => {
     setItemDetails(null);
 
     try {
-      const response = await fetch(`http://127.0.0.1:5001/api/get-item-details?itemNumber=${itemNumber}`);
+      const response = await fetch(`http://localhost:5001/api/get-item-details?itemNumber=${itemNumber}`);
       if (!response.ok) {
         throw new Error('Failed to fetch item details');
       }
@@ -79,7 +78,6 @@ const Dashboard = () => {
     setSubmitLoading(true);
     setError('');
     setResponseData(null);
-    setProgress(0);
 
     const formData = new FormData();
     formData.append('itemNumber', itemNumber);
@@ -87,19 +85,8 @@ const Dashboard = () => {
       formData.append('images', image);
     });
 
-    // Simulate a loading bar for 30 seconds
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
-        }
-        return prev + (100 / 30); // Increment progress
-      });
-    }, 1000);
-
     try {
-      const response = await fetch('http://127.0.0.1:5001/api/sortv2', {
+      const response = await fetch('http://localhost:5001/api/sortv2', {
         method: 'POST',
         body: formData,
       });
@@ -125,13 +112,14 @@ const Dashboard = () => {
     <div className="flex flex-col items-center mt-10 p-8 bg-gradient-to-r from-gray-50 to-white shadow-lg rounded-lg">
       <h1 className="text-5xl font-bold text-gray-800 mb-4">Quality Check Dashboard</h1>
       <p className="text-lg text-gray-600 mb-6">Upload images for quality assessment.</p>
-      <div className="flex items-center mb-4">
+      
+      <div className="flex items-center mb-4 w-full justify-center">
         <input 
           type="text" 
           placeholder="Enter item number" 
           value={itemNumber} 
           onChange={(e) => setItemNumber(e.target.value)} 
-          onKeyPress={(e) => e.key === 'Enter' && handleSearch()} // Enable enter key for search
+          onKeyPress={(e) => e.key === 'Enter' && handleSearch()} 
           className="p-3 border border-gray-300 rounded-lg w-80 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-md"
         />
         <button 
@@ -141,22 +129,30 @@ const Dashboard = () => {
           Search
         </button>
       </div>
-      {loading && <div className="mt-4 text-gray-500 animate-pulse">Loading...</div>}
+
+      {loading && (
+        <div className="mt-4 flex items-center">
+          <div className="animate-spin h-8 w-8 border-4 border-t-4 border-blue-600 rounded-full"></div>
+          <div className="ml-2 text-gray-500">Loading item details...</div>
+        </div>
+      )}
       {error && <div className="mt-4 text-red-500 font-semibold">{error}</div>}
+
       {itemDetails && (
         <div className="mt-4 p-4 border border-gray-300 rounded-lg shadow-md bg-white text-center">
           <h2 className="text-2xl font-semibold mb-2">Item Details:</h2>
-          <p className="text-gray-700">Description: {itemDetails.description}</p>
+          <p className="text-gray-700">Description: {itemDetails.description_string}</p>
           {itemDetails.image && (
             <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="mt-2 w-full h-auto object-contain rounded-lg shadow-sm mx-auto" />
           )}
         </div>
       )}
+
       <div 
         className="mt-4 p-4 border-2 border-dashed border-gray-300 rounded-lg w-80 bg-gray-100 hover:bg-gray-200 transition duration-200 cursor-pointer"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        onClick={() => document.querySelector('input[type="file"]').click()} // Added click functionality
+        onClick={() => document.querySelector('input[type="file"]').click()} 
       >
         <p className="text-center text-gray-600">Drag and drop images here or click to upload</p>
         <input 
@@ -166,6 +162,7 @@ const Dashboard = () => {
           className="hidden"
         />
       </div>
+
       <div className="mt-4">
         <h2 className="text-xl font-semibold">Uploaded Images:</h2>
         <div className="flex flex-wrap justify-center">
@@ -173,29 +170,33 @@ const Dashboard = () => {
             <img key={index} src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} className="w-48 h-48 object-cover m-2 border rounded-lg shadow transition-transform transform hover:scale-105" />
           ))}
         </div>
-        <button 
-          onClick={handleDeleteImages} 
-          className="mt-2 p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 shadow-md"
-        >
-          Delete All Images
-        </button>
+        <div className="flex justify-center mt-2">
+          <button 
+            onClick={handleDeleteImages} 
+            className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 shadow-md"
+          >
+            Delete All Images
+          </button>
+        </div>
       </div>
-      <div className="mt-2">
-        <button 
-          onClick={handleSubmit} 
-          className="p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 shadow-md"
-        >
-          {submitLoading ? 'Submitting...' : 'Check Quality'}
-        </button>
+
+      <div className="mt-4 flex justify-center">
+        {!loading && !submitLoading && (
+          <button 
+            onClick={handleSubmit} 
+            className="p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 shadow-md"
+          >
+            Check Quality
+          </button>
+        )}
         {submitLoading && (
-          <div className="mt-2">
-            <div className="h-2 bg-gray-300 rounded-full">
-              <div className="h-full bg-green-600 rounded-full" style={{ width: `${progress}%`, transition: 'width 1s' }}></div>
-            </div>
-            <div className="mt-1 text-gray-500">{Math.round(progress)}%</div>
+          <div className="mt-2 flex items-center">
+            <div className="animate-spin h-8 w-8 border-4 border-t-4 border-green-600 rounded-full"></div>
+            <div className="ml-2 text-gray-500">Processing your request...</div>
           </div>
         )}
       </div>
+
       {responseData && (
         <div className="mt-4 p-4 border border-gray-300 rounded-lg shadow-md bg-white">
           <h2 className="text-xl font-semibold">Response Summary:</h2>
@@ -209,6 +210,8 @@ const Dashboard = () => {
           </div>
           <h3 className="font-bold mt-2">Grading Summary:</h3>
           <p className="text-gray-700">{responseData.grading_reason_summary}</p>
+          <h3 className="font-bold mt-2">Repair Reasoning:</h3>
+          <p className="text-gray-700">{responseData.repair_reasoning}</p>
         </div>
       )}
     </div>

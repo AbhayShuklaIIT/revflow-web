@@ -7,6 +7,9 @@ const UpdateItem = () => {
   const [error, setError] = useState('');
   const [decisionModel, setDecisionModel] = useState('');
   const [claimApprovalModel, setClaimApprovalModel] = useState('');
+  const [specialCases, setSpecialCases] = useState(''); // State for special cases
+  const [tags, setTags] = useState([]); // Set default tags
+  const [newTag, setNewTag] = useState(''); // State for new tag input
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
@@ -16,9 +19,11 @@ const UpdateItem = () => {
     setItemDetails(null);
     setDecisionModel('');
     setClaimApprovalModel('');
+    setSpecialCases(''); // Reset special cases on new search
+    setTags([]); // Reset tags on new search
 
     try {
-      const response = await fetch(`http://127.0.0.1:5001//api/get-item-details?itemNumber=${itemNumber}`);
+      const response = await fetch(`http://localhost:5001/api/get-item-details?itemNumber=${itemNumber}`);
       if (!response.ok) {
         throw new Error('Failed to fetch item details');
       }
@@ -28,6 +33,8 @@ const UpdateItem = () => {
         setItemDetails(itemData);
         setDecisionModel(itemData.decisionModel);
         setClaimApprovalModel(itemData.claimApprovalModel);
+        setSpecialCases(itemData.special_cases || ''); // Set special cases from response
+        setTags(itemData.tags || []); // Set tags from response
       } else {
         throw new Error('Failed to fetch item details');
       }
@@ -44,12 +51,12 @@ const UpdateItem = () => {
     setSubmitMessage('');
 
     try {
-      const response = await fetch('http://127.0.0.1:5001//api/update-decision-model', {
+      const response = await fetch('http://localhost:5001/api/update-decision-model', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ itemNumber, decisionModel, claimApprovalModel }),
+        body: JSON.stringify({ itemNumber, decisionModel, claimApprovalModel, specialCases, tags }), // Include special cases in the submission
       });
 
       if (!response.ok) {
@@ -67,6 +74,17 @@ const UpdateItem = () => {
     } finally {
       setSubmitLoading(false);
     }
+  };
+
+  const handleAddTag = () => {
+    if (newTag && !tags.includes(newTag)) {
+      setTags([...tags, newTag]);
+      setNewTag('');
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
   return (
@@ -115,6 +133,46 @@ const UpdateItem = () => {
               className="mt-2 p-4 border border-gray-300 rounded-lg w-full h-96 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-md bg-yellow-50 resize-none transition duration-200 ease-in-out transform hover:scale-105"
               style={{ fontSize: '18px', lineHeight: '1.6', fontFamily: 'Arial, sans-serif', color: '#333' }}
             />
+          </div>
+          <div className="mt-4">
+            <label className="text-gray-700 font-bold">Special Cases:</label>
+            <textarea 
+              value={specialCases} 
+              onChange={(e) => setSpecialCases(e.target.value)} 
+              className="mt-2 p-4 border border-gray-300 rounded-lg w-full h-96 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-md bg-yellow-50 resize-none transition duration-200 ease-in-out transform hover:scale-105"
+              style={{ fontSize: '18px', lineHeight: '1.6', fontFamily: 'Arial, sans-serif', color: '#333' }}
+            />
+          </div>
+          <div className="mt-4">
+            <label className="text-gray-700 font-bold">Tags:</label>
+            <div className="flex flex-col mt-2">
+              {tags.map((tag, index) => (
+                <div key={index} className="flex items-center justify-between p-2 border border-gray-300 rounded-lg mb-2">
+                  <span className="text-gray-800">{tag}</span>
+                  <button 
+                    onClick={() => handleRemoveTag(tag)} 
+                    className="ml-2 p-1 bg-red-600 text-white rounded hover:bg-red-700 transition duration-200"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center mt-4">
+              <input 
+                type="text" 
+                placeholder="Add new tag" 
+                value={newTag} 
+                onChange={(e) => setNewTag(e.target.value)} 
+                className="p-2 border border-gray-300 rounded-lg w-80 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 shadow-md"
+              />
+              <button 
+                onClick={handleAddTag} 
+                className="ml-2 p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200"
+              >
+                Add
+              </button>
+            </div>
           </div>
           <button 
             onClick={handleDecisionModelSubmit} 

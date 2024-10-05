@@ -16,7 +16,7 @@ const Claims = () => {
     setItemDetails(null);
 
     try {
-      const response = await fetch(`http://127.0.0.1:5001/api/get-item-details?itemNumber=${itemNumber}`);
+      const response = await fetch(`http://localhost:5001/api/get-item-details?itemNumber=${itemNumber}`);
       if (!response.ok) {
         throw new Error('Failed to fetch item details');
       }
@@ -58,7 +58,7 @@ const Claims = () => {
     });
 
     try {
-      const response = await fetch('http://127.0.0.1:5001/api/sortv2', {
+      const response = await fetch('http://localhost:5001/api/sortv2', {
         method: 'POST',
         body: formData,
       });

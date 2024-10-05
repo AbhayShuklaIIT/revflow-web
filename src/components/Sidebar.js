@@ -19,10 +19,13 @@ const Sidebar = () => {
           <Link to="/update" className="block p-3 rounded-lg hover:bg-gray-700 transition duration-200">Update Item</Link>
         </li>
         <li>
-          <Link to="/quality-check" className="block p-3 rounded-lg hover:bg-gray-700 transition duration-200">Quality Check Old Item</Link>
+          <Link to="/quality-check" className="block p-3 rounded-lg hover:bg-gray-700 transition duration-200">Quality Check</Link>
         </li>
         <li>
           <Link to="/claims" className="block p-3 rounded-lg hover:bg-gray-700 transition duration-200">Claims</Link>
+        </li>
+        <li>
+          <Link to="/query-tags" className="block p-3 rounded-lg hover:bg-gray-700 transition duration-200">Query Tags</Link>
         </li>
       </ul>
     </div>
