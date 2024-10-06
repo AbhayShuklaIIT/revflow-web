@@ -98,7 +98,7 @@ const Claims = () => {
         <div className="flex justify-center space-x-4">
           <input 
             type="text" 
-            placeholder="Enter item number" 
+            placeholder="Enter SKU ID" 
             value={itemNumber} 
             onChange={(e) => setItemNumber(e.target.value)}
             onKeyPress={(e) => handleKeyPress(e, handleSearch)}
@@ -174,6 +174,8 @@ const Claims = () => {
             <div>
               <h3 className="font-bold text-gray-700">Claim Validation Reasoning:</h3>
               <p className="text-gray-600">{responseData.claim_validation_reasoning}</p>
+              <h3 className="font-bold text-gray-700">Repair Reasoning:</h3>
+              <p className="text-gray-600">{responseData.repair_reasoning}</p>
             </div>
           </div>
         )}

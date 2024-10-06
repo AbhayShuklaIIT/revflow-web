@@ -116,7 +116,7 @@ const Dashboard = () => {
       <div className="flex items-center mb-4 w-full justify-center">
         <input 
           type="text" 
-          placeholder="Enter item number" 
+          placeholder="Enter SKU ID" 
           value={itemNumber} 
           onChange={(e) => setItemNumber(e.target.value)} 
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()} 
