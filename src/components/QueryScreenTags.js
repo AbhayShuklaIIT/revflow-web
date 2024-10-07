@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
+import { Pie } from 'react-chartjs-2'; // Importing Pie chart component from Chart.js
+import { Chart, registerables } from 'chart.js'; // Importing Chart.js to register elements
+
+Chart.register(...registerables); // Registering all necessary components
 
 const QueryScreenTags = () => {
   const [itemNumber, setItemNumber] = useState('');
@@ -10,6 +14,7 @@ const QueryScreenTags = () => {
   const [error, setError] = useState('');
   const [results, setResults] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [tagDistribution, setTagDistribution] = useState({}); // State to hold tag distribution
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -43,6 +48,9 @@ const QueryScreenTags = () => {
       const data = await response.json();
       if (data.status === 'success') {
         setTags(data.tags);
+        if (data.tag_distribution) {
+          setTagDistribution(data.tag_distribution); // Set tag distribution for pie chart
+        }
       } else {
         throw new Error('API returned unsuccessful status');
       }
@@ -130,6 +138,17 @@ const QueryScreenTags = () => {
     XLSX.writeFile(workbook, 'results.xlsx');
   };
 
+  // Prepare data for pie chart
+  const pieChartData = {
+    labels: Object.keys(tagDistribution),
+    datasets: [{
+      data: Object.values(tagDistribution),
+      backgroundColor: Object.keys(tagDistribution).map((_, index) => 
+        `hsl(${(index * 360 / Object.keys(tagDistribution).length)}, 70%, 50%)` // Dynamic colors
+      ),
+    }],
+  };
+
   return (
     <div className="min-h-screen bg-[#f2f3ff] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -169,11 +188,11 @@ const QueryScreenTags = () => {
             <h2 className="text-lg font-bold mb-4">Select Tags:</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {tags.map((tag, index) => (
-                <div key={index} className="flex items-center p-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition duration-200">
+                <div key={index} className={`flex items-center p-2 border border-gray-300 rounded-lg cursor-pointer transition duration-200 ${selectedTags.includes(tag) ? 'bg-blue-100' : 'hover:bg-gray-100'}`} onClick={() => handleTagChange(tag)}>
                   <input 
                     type="checkbox" 
                     checked={selectedTags.includes(tag)} 
-                    onChange={() => handleTagChange(tag)} 
+                    readOnly 
                     className="mr-2"
                   />
                   <label className="text-gray-800">{tag}</label>
@@ -199,6 +218,28 @@ const QueryScreenTags = () => {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+        {Object.keys(tagDistribution).length > 0 && Object.values(tagDistribution).some(value => value > 0) && ( // Check if there are valid values for the pie chart
+          <div className="mt-10">
+            <h2 className="text-center text-lg font-bold mb-4">Tag Distribution</h2>
+            <div className="flex justify-center">
+              <div style={{ width: '300px', height: '300px' }}> {/* Set a fixed size for the pie chart */}
+                <Pie data={pieChartData} options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                      labels: {
+                        boxWidth: 10,
+                        padding: 15,
+                      },
+                    },
+                  },
+                }} />
+              </div>
+            </div>
           </div>
         )}
         <div className="flex justify-center mt-8">

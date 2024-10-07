@@ -124,7 +124,7 @@ const Dashboard = () => {
         />
         <button 
           onClick={handleSearch} 
-          className="ml-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 shadow-md"
+          className="ml-2 p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 shadow-md text-lg"
         >
           Search
         </button>
@@ -132,8 +132,11 @@ const Dashboard = () => {
 
       {loading && (
         <div className="mt-4 flex items-center">
-          <div className="animate-spin h-8 w-8 border-4 border-t-4 border-blue-600 rounded-full"></div>
-          <div className="ml-2 text-gray-500">Loading item details...</div>
+          <div className="relative">
+            <div className="animate-spin h-16 w-16 border-8 border-t-8 border-blue-600 rounded-full"></div>
+            <div className="absolute top-0 left-0 h-16 w-16 border-8 border-t-8 border-blue-300 rounded-full animate-ping"></div>
+          </div>
+          <div className="ml-4 text-gray-500 text-xl">Loading item details...</div>
         </div>
       )}
       {error && <div className="mt-4 text-red-500 font-semibold">{error}</div>}
@@ -143,7 +146,7 @@ const Dashboard = () => {
           <h2 className="text-2xl font-semibold mb-2">Item Details:</h2>
           <p className="text-gray-700">Description: {itemDetails.description_string}</p>
           {itemDetails.image && (
-            <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="mt-2 w-full h-auto object-contain rounded-lg shadow-sm mx-auto" />
+            <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="mt-2 max-w-full h-auto object-contain rounded-lg shadow-sm mx-auto" />
           )}
         </div>
       )}
@@ -167,13 +170,13 @@ const Dashboard = () => {
         <h2 className="text-xl font-semibold">Uploaded Images:</h2>
         <div className="flex flex-wrap justify-center">
           {images.map((image, index) => (
-            <img key={index} src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} className="w-48 h-48 object-cover m-2 border rounded-lg shadow transition-transform transform hover:scale-105" />
+            <img key={index} src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} className="max-w-full h-auto object-contain m-2 border rounded-lg shadow transition-transform transform hover:scale-105" />
           ))}
         </div>
         <div className="flex justify-center mt-2">
           <button 
             onClick={handleDeleteImages} 
-            className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 shadow-md"
+            className="p-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200 shadow-md text-lg"
           >
             Delete All Images
           </button>
@@ -184,15 +187,18 @@ const Dashboard = () => {
         {!loading && !submitLoading && (
           <button 
             onClick={handleSubmit} 
-            className="p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 shadow-md"
+            className="p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 shadow-md text-lg"
           >
             Check Quality
           </button>
         )}
         {submitLoading && (
           <div className="mt-2 flex items-center">
-            <div className="animate-spin h-8 w-8 border-4 border-t-4 border-green-600 rounded-full"></div>
-            <div className="ml-2 text-gray-500">Processing your request...</div>
+            <div className="relative">
+              <div className="animate-spin h-16 w-16 border-8 border-t-8 border-green-600 rounded-full"></div>
+              <div className="absolute top-0 left-0 h-16 w-16 border-8 border-t-8 border-green-300 rounded-full animate-ping"></div>
+            </div>
+            <div className="ml-4 text-gray-500 text-xl">Processing your request...</div>
           </div>
         )}
       </div>
@@ -210,8 +216,8 @@ const Dashboard = () => {
           </div>
           <h3 className="font-bold mt-2">Grading Summary:</h3>
           <p className="text-gray-700">{responseData.grading_reason_summary}</p>
-          <h3 className="font-bold mt-2">Repair Reasoning:</h3>
-          <p className="text-gray-700">{responseData.repair_reasoning}</p>
+          {/* <h3 className="font-bold mt-2">Resolution:</h3>
+          <p className="text-gray-700">{responseData.repair_reasoning}</p> */}
         </div>
       )}
     </div>

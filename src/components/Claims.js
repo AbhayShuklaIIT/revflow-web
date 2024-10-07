@@ -118,7 +118,9 @@ const Claims = () => {
             <h2 className="text-xl font-semibold text-gray-800 mb-2">Item Details:</h2>
             <p className="text-gray-700 mb-2 text-center">Description: {itemDetails.description}</p>
             {itemDetails.image && (
-              <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="w-full h-auto object-contain rounded-lg shadow-sm mb-4" />
+              <div className="w-full h-96 overflow-hidden">
+                <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="w-full h-full object-contain" />
+              </div>
             )}
           </div>
         )}
@@ -136,7 +138,9 @@ const Claims = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-2">Uploaded Images:</h2>
               <div className="flex flex-wrap justify-center -mx-2">
                 {images.map((image, index) => (
-                  <img key={index} src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} className="w-40 h-40 object-cover m-2 border rounded-lg shadow-sm" /> // Increased size
+                  <div key={index} className="w-full h-96 overflow-hidden m-2">
+                    <img src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} className="w-full h-full object-contain border rounded-lg shadow-sm" />
+                  </div>
                 ))}
               </div>
               <button 
