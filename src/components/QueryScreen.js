@@ -87,11 +87,11 @@ const QueryScreen = () => {
             placeholder="Enter your query" 
             value={query} 
             onChange={(e) => setQuery(e.target.value)} 
-            className="p-4 border-2 border-[#434de7] rounded-l-lg w-96 focus:outline-none focus:ring-2 focus:ring-[#434de7] focus:border-transparent"
+            className="p-4 border-2 border-[#434de7] rounded-l-lg w-96 focus:outline-none focus:ring-2 focus:ring-[#434de7] focus:border-transparent shadow-md"
           />
           <button 
             onClick={handleSearch} 
-            className="px-6 py-4 bg-[#434de7] text-white rounded-r-lg hover:bg-[#3038a0] transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#434de7] focus:ring-offset-2"
+            className="px-6 py-4 bg-[#434de7] text-white rounded-r-lg hover:bg-[#3038a0] transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#434de7] focus:ring-offset-2 shadow-md"
           >
             Search
           </button>
