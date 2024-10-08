@@ -146,7 +146,7 @@ const Dashboard = () => {
           <h2 className="text-2xl font-semibold mb-2">Item Details:</h2>
           <p className="text-gray-700">Description: {itemDetails.description_string}</p>
           {itemDetails.image && (
-            <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="mt-2 max-w-full h-auto object-contain rounded-lg shadow-sm mx-auto" />
+            <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="mt-2 max-w-xs h-auto object-contain rounded-lg shadow-sm mx-auto" />
           )}
         </div>
       )}
@@ -170,7 +170,7 @@ const Dashboard = () => {
         <h2 className="text-xl font-semibold">Uploaded Images:</h2>
         <div className="flex flex-wrap justify-center">
           {images.map((image, index) => (
-            <img key={index} src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} className="max-w-full h-auto object-contain m-2 border rounded-lg shadow transition-transform transform hover:scale-105" />
+            <img key={index} src={URL.createObjectURL(image)} alt={`Uploaded ${index}`} className="max-w-xs h-auto object-contain m-2 border rounded-lg shadow transition-transform transform hover:scale-105" />
           ))}
         </div>
         <div className="flex justify-center mt-2">
