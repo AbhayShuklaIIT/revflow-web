@@ -111,7 +111,15 @@ const Claims = () => {
             Search
           </button>
         </div>
-        {loading && <div className="text-gray-500">Loading...</div>}
+        {loading && (
+          <div className="mt-4 flex items-center">
+            <div className="relative">
+              <div className="animate-spin h-16 w-16 border-8 border-t-8 border-blue-600 rounded-full"></div>
+              <div className="absolute top-0 left-0 h-16 w-16 border-8 border-t-8 border-blue-300 rounded-full animate-ping"></div>
+            </div>
+            <div className="ml-4 text-gray-500 text-xl">Loading item details...</div>
+          </div>
+        )}
         {error && <div className="text-red-500">{error}</div>}
         {itemDetails && (
           <div className="p-4 border border-gray-300 rounded-lg shadow-sm bg-gray-50 flex flex-col items-center">
@@ -169,7 +177,12 @@ const Claims = () => {
             onClick={handleSubmit} 
             className="w-full p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
           >
-            {submitLoading ? 'Submitting...' : 'Submit'}
+            {submitLoading ? (
+              <div className="flex items-center justify-center">
+                <div className="h-6 w-6 border-4 border-t-4 border-white rounded-full mr-2 animate-pulse"></div>
+                <span className="animate-pulse">Validating Claim...</span>
+              </div>
+            ) : 'Submit'}
           </button>
         </div>
         {responseData && (
@@ -178,7 +191,7 @@ const Claims = () => {
             <div>
               <h3 className="font-bold text-gray-700">Claim Validation Reasoning:</h3>
               <p className="text-gray-600">{responseData.claim_validation_reasoning}</p>
-              <h3 className="font-bold text-gray-700">Repair Reasoning:</h3>
+              <h3 className="font-bold text-gray-700">Toolkit Recommendation:</h3>
               <p className="text-gray-600">{responseData.repair_reasoning}</p>
             </div>
           </div>
