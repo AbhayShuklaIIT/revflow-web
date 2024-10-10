@@ -144,9 +144,9 @@ const Dashboard = () => {
       {itemDetails && (
         <div className="mt-4 p-4 border border-gray-300 rounded-lg shadow-md bg-white text-center">
           <h2 className="text-2xl font-semibold mb-2">Item Details:</h2>
-          <p className="text-gray-700">Description: {itemDetails.description_string}</p>
+          <p className="text-gray-700">Description: {itemDetails.description}</p>
           {itemDetails.image && (
-            <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="mt-2 max-w-xs h-auto object-contain rounded-lg shadow-sm mx-auto" />
+            <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="mt-2 max-w-3xl h-auto object-contain rounded-lg shadow-sm mx-auto" />
           )}
         </div>
       )}
