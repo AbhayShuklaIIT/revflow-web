@@ -167,7 +167,7 @@ const QueryScreenTags = () => {
         <div className="flex justify-center mb-8">
           <input 
             type="text" 
-            placeholder="Enter item number" 
+            placeholder="Enter SKU ID" 
             value={itemNumber} 
             onChange={(e) => setItemNumber(e.target.value)} 
             className="p-4 border-2 border-[#434de7] rounded-lg w-96 focus:outline-none focus:ring-2 focus:ring-[#434de7] focus:border-transparent"
