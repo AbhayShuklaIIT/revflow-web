@@ -117,7 +117,7 @@ const UpdateItem = () => {
             <img src={`data:image/jpeg;base64,${itemDetails.image}`} alt={itemDetails.image_filename} className="mt-2 w-100 h-64 object-cover rounded-lg shadow-sm mx-auto" />
           )}
           <div className="mt-4">
-            <label className="text-gray-700 font-bold">Claim Approval Model:</label>
+            <label className="text-gray-700 font-bold">Sorting Decision Model:</label>
             <textarea 
               value={claimApprovalModel} 
               onChange={(e) => setClaimApprovalModel(e.target.value)} 
@@ -126,7 +126,7 @@ const UpdateItem = () => {
             />
           </div>
           <div className="mt-4">
-            <label className="text-gray-700 font-bold">Decision Model:</label>
+            <label className="text-gray-700 font-bold">Checklist:</label>
             <textarea 
               value={decisionModel} 
               onChange={(e) => setDecisionModel(e.target.value)} 
