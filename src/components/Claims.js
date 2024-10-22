@@ -186,13 +186,28 @@ const Claims = () => {
           </button>
         </div>
         {responseData && (
-          <div className="p-4 border border-gray-300 rounded-lg shadow-sm bg-gray-50">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Response Summary:</h2>
-            <div>
-              <h3 className="font-bold text-gray-700">Claim Validation Reasoning:</h3>
-              <p className="text-gray-600">{responseData.claim_validation_reasoning}</p>
-              <h3 className="font-bold text-gray-700">Toolkit Recommendation:</h3>
-              <p className="text-gray-600">{responseData.repair_reasoning}</p>
+          <div className="p-6 border border-gray-300 rounded-lg shadow-lg bg-white transition-transform transform hover:scale-105">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Results</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="text-left p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50">
+                <h3 className="font-semibold text-gray-700">Claim Validation Reasoning:</h3>
+                <p className="text-gray-600">{responseData.claim_validation_reasoning}</p>
+                <div className={`mt-2 p-1 px-4 text-white rounded-lg text-center ${responseData.Approval === 'F' ? 'bg-red-600' : 'bg-green-600'}`} style={{ display: 'inline-block', margin: '0 auto' }}>
+                 {responseData.Approval === 'F' ? 'Claim Denied' : 'Claim Approved'}
+                </div>
+              </div>
+              <div className="text-left p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50">
+                <h3 className="font-semibold text-gray-700">Repair Reasoning:</h3>
+                <p className="text-gray-600">{responseData.repair_reasoning}</p>
+              </div>
+              <div className="text-left p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50">
+                <h3 className="font-semibold text-gray-700">Toolkit Recommendations:</h3>
+                <div className="flex flex-wrap">
+                  {responseData.toolkits_recommended.map((toolkit, index) => (
+                    <span key={index} className="bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded">{toolkit}</span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}
